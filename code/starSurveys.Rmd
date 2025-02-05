@@ -1,0 +1,1668 @@
+---
+title: "starSurveys"
+author: "Augie Kalytiak-Davis"
+date: '2024-09-23'
+output: html_document
+---
+### Setting working directory
+```{r setup, include=FALSE, echo=FALSE}
+### Setting working directory
+require("knitr")
+opts_knit$set(root.dir = "~/Desktop/Chapter 1/data/sheets")
+```
+
+### Libraries
+```{r}
+### For reading in Excel files
+library(readxl)
+### For plotting
+library(ggplot2)
+### For data manipulation
+library(dplyr)
+library(tidyr)
+### For avoiding overlap in labels
+library(ggrepel)
+### For arrows
+library(grid)
+### For cute tables
+library(xtable)
+```
+
+### Reading in Excel, combining files
+```{r, warning=FALSE}
+### Reading in names of sheets
+sheetnames <- excel_sheets("starSurveys2024.xlsx")
+sheetnames <- sheetnames[1:23]
+### adding an underscore, so I can call 'em individually
+fixtnames <- gsub(" ", "_", sheetnames)
+### Reading in sheets, renaming
+star_frames <- lapply(setNames(sheetnames, fixtnames),  
+                    function(x) read_excel("starSurveys2024.xlsx", sheet=x, col_types = c("text", "date", "text", "text", "numeric", "numeric", "numeric", "text")))
+
+                      
+### Making a combined dataframe!!!!
+allSites <- bind_rows(star_frames, .id="sheet") 
+```
+
+### Splitting into separate Dataframes
+```{r}
+list2env(star_frames,envir=.GlobalEnv)
+```
+### Cattle Point
+```{r}
+CP <- bind_rows(CP_24vi24, CP_19vii24, CP_2viii24) 
+CP_lep <-filter(CP, Spp == "LEP")
+ggplot(CP_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1) +
+  ylim(-1,20)
+mean(CP_lep$Wt, na.rm=TRUE)
+mean(CP_lep$length, na.rm=TRUE)
+nrow(CP_lep) / (5 * 10)
+
+
+
+
+cpHisto <- CP_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+cpHisto
+```
+
+### Deadman Bay
+```{r}
+DB <- bind_rows(DB_25vi24, DB_22vii24, DB_31vii24) 
+DB_lep <-filter(DB, Spp == "LEP")
+ggplot(DB_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(DB_lep$Wt, na.rm=TRUE)
+nrow(DB_lep) / (5 * 10)
+
+
+dbHisto <- DB_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+dbHisto
+```
+### LCRA
+```{r}
+LCRA <- bind_rows(LCRA_23vi24, LCRA_23vii24, LCRA_2viii24) 
+LCRA_lep <-filter(LCRA, Spp == "LEP")
+ggplot(LCRA_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(LCRA_lep$Wt, na.rm=TRUE)
+nrow(LCRA_lep) / (5 * 10)
+
+lcraHisto <- LCRA_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+lcraHisto
+```
+
+### PC
+```{r}
+PC <- bind_rows(PC_22vi24, PC_21vii24, PC_30vii24) 
+PC_lep <-filter(PC, Spp == "LEP")
+ggplot(PC_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(PC_lep$Wt, na.rm=TRUE)
+nrow(PC_lep) / (5 * 10)
+
+pcHisto <- PC_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+pcHisto
+```
+
+### PPNP
+```{r}
+PPNP <- bind_rows(PPNP_2vii24, PPNP_8vii24, PPNP_24vii24) 
+PPNP_lep <-filter(PPNP, Spp == "LEP")
+ggplot(PPNP_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(PPNP_lep$Wt, na.rm=TRUE)
+nrow(PPNP_lep) / (5 * 10)
+
+ppnpHisto <- PPNP_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+ppnpHisto
+```
+
+### PPSP
+```{r}
+PPSP <- bind_rows(PPSP_18vii24, PPSP_17viii24, PPSP_19viii24) 
+PPSP_lep <-filter(PPSP, Spp == "LEP")
+ggplot(PPSP_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(PPSP_lep$Wt, na.rm=TRUE)
+nrow(PPSP_lep) / (5 * 10)
+
+ppspHisto <- PPSP_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+ppspHisto
+```
+### RT
+```{r}
+RT <- bind_rows(RT_3viii24, RT_4viii24) 
+RT_lep <-filter(RT, Spp == "LEP")
+ggplot(RT_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20)
+mean(RT_lep$Wt, na.rm=TRUE)
+nrow(RT_lep) / (5 * 10)
+
+rtHisto <- RT_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+rtHisto
+```
+### Snug Harbor
+```{r}
+SH <- bind_rows(SH_5viii24, SH_16viii24, SH_20viii24) 
+SH_lep <-filter(SH, Spp == "LEP")
+ggplot(SH_lep, aes(y=Wt)) + 
+  geom_histogram(binwidth = 1)+
+  ylim(-1,20) +
+  xlab(nrow(SH_lep))
+mean(SH_lep$Wt, na.rm=TRUE)
+nrow(SH_lep) / (4 * 10)
+
+shHisto <- SH_lep %>%
+  ggplot(aes(y=Wt, fill=Spp, color=Spp)) + 
+  geom_histogram(binwidth = 2.5) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+              scale_y_continuous(limits = c(-5, 20), expand = c(0,0), breaks = c(0,5,10,15,20))+
+  scale_color_manual(values=c("black"))+
+  scale_fill_manual(values=c("#E0B46C")) 
+shHisto
+```
+
+## Mission: make graphs of Lep dens, mass, biomass over time
+### Isolate belts of Leps
+```{r}
+allsites_Lep <- filter(allSites, Spp == "LEP")
+allLep_belts <- filter(allsites_Lep, Belt =="1"|Belt =="2"|Belt =="3"|Belt =="4"|Belt =="5")
+allLep_belts <- allLep_belts %>% group_by(Site, Belt, Date) %>%tally() 
+### Adding 4th belt at SH!
+shbelt4 <- data.frame(Site='SH', Belt = '4', Date = as.Date("8/20/2024", "%m/%d/%y"), n = 0)
+allLep_belts <- rbind(allLep_belts,shbelt4)
+allLep_belts
+```
+
+### Get dens 
+```{r}
+allLep_belts <- mutate(allLep_belts, dens = n/10)
+lepdens2024 <- allLep_belts %>% group_by(Site) %>% summarise("2024dens" = mean(dens))
+lepdens2024 <- mutate(lepdens2024, year = 2024)
+lepdens2024
+```
+
+### Reading in 1991/92 data 
+```{r}
+pvlAPPROX <- data.frame(
+  site = c("DB", "CP", "LCRA", "ER", "LCFP", "TR", "GR", "BR", "DPR", "PPNP", "PC", ),
+  aream2 = c(348, 879, 466, 977, 1592, 2105, 473, 1338, 289, 488.5, NA),
+  year = c(1969, 1969, 1969, 1969, 1969, 1969, 1969, 1969, 1969, 1969, 1971), ### Not sure about this last PC date
+  pim2 =c(.01, .009, .3, .18, .1, .14, .31, .13, .19, .25, 4.8),### PC data seems suspicious
+  piwetwtg = c(601, 416, 296, 469, 186, 395, 357, 450.5, 581, 468, 37.6),
+  pibiom = c(6.01, 3.74, 88.8, 84.4, 18.6, 37.1, 110.7, 58.6, 110.4, 117.25, 236.8),
+  lem2 = c(2.13, 1.5, 1.67, .72, 4.72, 1.02, .53, 1.3, .84, .32, 1),
+  lewetwtg = c(7.6, 6.67, 2.66, 5.93, 2.09, 4.96, 3.81, 5.04, 5.11, 6.72, 1.85),
+  lebiom = c(16.2, 10, 4.4, 4.27, 9.86, 5.06, 2.02, 6.55, 4.29, 2.15, 1.85)
+)
+pislep60s
+```
+## Mission: get Pisaster average weights
+```{r}
+allsites_Pis <- filter(allSites, Spp == "PIS")
+pisMass2024 <- allsites_Pis %>% group_by(Site) %>% summarise("2024mass" = mean(Wt, na.rm=TRUE), "2024armlen"=mean(length, na.rm=TRUE))
+pisMass2024
+```
+
+
+## Mission: get Evasterias data
+```{r}
+allsites_Eva <- filter(allSites, Spp == "EVA")
+eva2024 <- allsites_Eva %>% group_by(Site) %>% summarise("2024mass" = mean(Wt, na.rm=TRUE), "2024armlen"=mean(length, na.rm=TRUE), "2024#"=n())
+eva2024
+#xtable(eva2024)
+allsites_Eva %>% summarise("2024mass" = mean(Wt, na.rm=TRUE), "2024armlen"=mean(length, na.rm=TRUE), "2024#"=n())
+```
+
+## Mission: get Dermasterias data
+```{r}
+allsites_Derm <- filter(allSites, Spp == "DERM")
+derm2024 <- allsites_Derm %>% group_by(Site) %>% summarise("2024mass" = mean(Wt, na.rm=TRUE), "2024armlen"=mean(length, na.rm=TRUE), "2024#"=n())
+derm2024
+```
+
+## Mission: get Henricia data
+```{r}
+allsites_Hen <- filter(allSites, Spp == "HEN")
+hen2024 <- allsites_Hen %>% group_by(Site) %>% summarise("2024mass" = mean(Wt, na.rm=TRUE), "2024armlen"=mean(length, na.rm=TRUE), "2024#"=n())
+hen2024
+```
+
+## Mission: preliminary extensions of the o.g. graphs
+```{r}
+pvlApprox<-read_excel('pvlAPPROXIMATE.xlsx', col_types = c("text", "text", "numeric", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+head(pvlApprox)
+```
+
+```{r}
+pisBmass <- pvlApprox %>%
+  ggplot(aes(x=siteCode, y=pisgperm2, fill=year)) + 
+           geom_bar(position="dodge", stat="identity")+
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150,200))+
+  xlab('Site') +
+  ylab('Pisaster biomass (g/m2)')+
+  scale_fill_manual(values = c("#e4492f", "#f6710e", "#fcab00"))
+pisBmass
+```
+
+
+```{r}
+```
+
+
+```{r}
+mean_pis_bmass <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(pisgperm2, na.rm=TRUE),
+            se = sd(pisgperm2, na.rm=TRUE)/sqrt(n()))
+
+pisoertime <- mean_pis_bmass %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .7, size = 0.4, fill =c("#9C6AA0")) +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.3) +
+                     xlab ("Years") +
+                     ylab (bquote('Pisaster biomass '~(g/m^2)~' per site')) +
+              scale_y_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50,100,150,200)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+pisoertime
+```
+
+```{r}
+pisoertimePts <- pvlApprox %>%
+  ggplot(aes(x=year, y=pisgperm2)) +
+  stat_summary(fun.y=mean, geom="bar", color="#9C6AA0", size=.9, fill ="#DAC8DC", width=.7) +
+  geom_point() +
+  geom_line(data=pvlApprox[!is.na(pvlApprox$pisgperm2),], aes( group = site ), linetype=3 ) +
+                     xlab ("Years") +
+                     ylab (bquote('Pisaster biomass '~(g/m^2)~' per site')) +
+              scale_y_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50,100,150,200)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+pisoertimePts
+```
+
+
+
+```{r}
+mean_pis_dens <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(pisPerM2, na.rm=TRUE),
+            se = sd(pisPerM2, na.rm=TRUE)/sqrt(n()))
+
+pisdenstime <- mean_pis_dens %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .7, size = 0.4, fill ="#e4492f") +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.3) +
+                     xlab ("Years") +
+                     ylab ("Pisaster Density (#/m2)") +
+              scale_y_continuous(limits = c(0, 1.5), expand = c(0,0), breaks = c(0, .5,1.0)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+pisdenstime
+```
+
+
+```{r}
+mean_pis_mass <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(piswetwtg, na.rm=TRUE),
+            se = sd(piswetwtg, na.rm=TRUE)/sqrt(n()))
+
+pismasstime <- mean_pis_mass %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .7, size = 0.4, fill ="#e4492f") +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.3) +
+                     xlab ("Years") +
+                     ylab ("Mean Pisaster Mass (g)") +
+              scale_y_continuous(limits = c(0, 600), expand = c(0,0), breaks = c(0, 250, 500)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+pismasstime
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+pisBmass <- pvlApprox %>%
+  filter(siteCode == "CP"|siteCode =="DB"|siteCode =="LCRA"|siteCode =="PC"|siteCode =="PPNP") %>%
+  ggplot(aes(x=siteCode, y=pisgperm2, fill=year)) + 
+           geom_bar(position="dodge", stat="identity")+
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150,200))+
+  xlab('Site') +
+  ylab('Pisaster biomass (g/m2)')+
+  scale_fill_manual(values = c("#e4492f", "#f6710e", "#fcab00"))
+pisBmass
+```
+
+```{r}
+lepBmass <- pvlApprox %>%
+  ggplot(aes(x=siteCode, y=lepgperm2, fill=year)) + 
+           geom_bar(position="dodge", stat="identity")+
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 16), expand = c(0,0), breaks = c(0, 5, 10, 15))+
+  xlab('Site') +
+  ylab('Leptasterias biomass (g/m2)') +
+  scale_fill_manual(values = c("#206195", "#40a6d4", "#B7cfe6"))
+lepBmass
+```
+
+
+
+
+
+```{r}
+lepBmass <- pvlApprox %>%
+  filter(siteCode == "CP"|siteCode =="DB"|siteCode =="LCRA"|siteCode =="PC"|siteCode =="PPNP") %>%
+  ggplot(aes(x=siteCode, y=lepgperm2, fill=year)) + 
+           geom_bar(position="dodge", stat="identity")+
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 17), expand = c(0,0), breaks = c(0, 5, 10, 15))+
+  xlab('Site') +
+  ylab('Leptasterias biomass (g/m2)')+
+  scale_fill_manual(values = c("#206195", "#40a6d4", "#B7cfe6"))
+lepBmass
+```
+
+
+```{r}
+
+mean_lep_bmass <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(lepgperm2, na.rm=TRUE),
+            se = sd(lepgperm2, na.rm=TRUE)/sqrt(n()))
+
+lepoertime <- mean_lep_bmass %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .7, size = 0.4, fill =c("#E0B46C")) +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.3) +
+                     xlab ("Years") +
+                     ylab (bquote('Leptasterias biomass '~(g/m^2)~' per site')) +
+              scale_y_continuous(limits = c(0, 18), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+lepoertime
+```
+
+
+```{r}
+mean_lep_dens <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(lepPerM2, na.rm=TRUE),
+            se = sd(lepPerM2, na.rm=TRUE)/sqrt(n()))
+
+lepdenstime <- mean_lep_dens %>%
+  filter(year != "1991-1992") %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .5, size = 0.4, fill =c("#E0B46C")) +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.2) +
+                     xlab ("Years") +
+                     ylab (bquote('Leptasterias density'~(n/m^2)~' per site')) +
+              scale_y_continuous(limits = c(0, 5), expand = c(0,0), breaks = c(0,1, 3,5)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+lepdenstime
+```
+
+
+
+```{r}
+mean_lep_mass <- pvlApprox %>% 
+  group_by(year) %>% 
+  summarise(mean= mean(lepWt, na.rm=TRUE),
+            se = sd(lepWt, na.rm=TRUE)/sqrt(n()))
+
+lepmasstime <- mean_lep_mass %>%
+  filter(year != "1991-1992") %>%
+  ggplot(aes(x=year, y=mean)) + 
+  stat_summary(geom = "col", fun = mean, color = 'black', position='dodge', width = .5, size = 0.4, fill =c("#E0B46C")) +
+              geom_errorbar(aes(ymin = mean-se, ymax = mean+se),
+                position =  position_dodge(width = .5), width = 0.2) +
+                     xlab ("Years") +
+                     ylab ("Mean Leptasterias mass (g) per site") +
+              scale_y_continuous(limits = c(0, 7), expand = c(0,0), breaks = c(0, 1,3,5,7)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+
+lepmasstime
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+lepoertimePts <- pvlApprox %>%
+  ggplot(aes(x=year, y=lepgperm2)) +
+  stat_summary(fun.y=mean, geom="bar", color="#E0B46C", size=.9, fill ="#F3E2C4", width=.7) +
+  geom_point() +
+  geom_line(data=pvlApprox[!is.na(pvlApprox$lepgperm2),],aes( group = site ), linetype=3 ) +
+                     xlab ("Years") +
+                     ylab (bquote('Leptasterias biomass '~(g/m^2)~' per site')) +
+              scale_y_continuous(limits = c(0, 18), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) 
+lepoertimePts
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+pvl60s <- pvlApprox %>%
+  filter(year == "1969-1971") %>%
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point() +
+          theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  geom_text_repel(aes(label=siteCode), min.segment.length = Inf, nudge_x = 3, nudge_y = 0.3)+
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvl60s
+```
+
+```{r}
+pvl90s <- pvlApprox %>%
+  filter(year == "1991-1992") %>%
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point() + 
+  xlim(0, 250) +
+  ylim(0,18) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+  geom_text_repel(aes(label=siteCode), nudge_x = 0, nudge_y = 1, min.segment.length = Inf)+
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvl90s
+```
+
+```{r}
+pvl20s <- pvlApprox %>%
+  filter(year == "2024") %>%
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point() +
+  xlim(0,250)+
+  ylim(0,20) + theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+  geom_text_repel(aes(label=siteCode), nudge_x = 0, nudge_y = -1, min.segment.length = Inf)+
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvl20s
+```
+
+```{r}
+pvl20s <- pvlApprox %>%
+  filter(year == "2024") %>%
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point() +
+  xlim(0,25) + 
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+  geom_text_repel(aes(label=siteCode),nudge_x = 0, nudge_y = -1, min.segment.length = Inf)+
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 25), expand = c(0,0), breaks = c(0, 5, 10, 1,20)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvl20s
+```
+
+
+
+```{r}
+pvlAllDecadesLegend <- pvlApprox %>%
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point(aes(fill = year), shape = 21, size=3) +
+  scale_fill_manual(values = c('#e4492f','#85D16D','#206195'))
+  #geom_line(linetype=3) +
+  #geom_segment(aes(xend=c(tail(pisgperm2, n=-1), NA),yend=c(tail(lepgperm2, n=-1), NA),color=siteCode)) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvlAllDecadesLegend
+```
+
+
+```{r}
+pvlAllDecades <- pvlApprox %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=year, line=year)) +
+  geom_point(aes(fill = year), shape = 21, size=3.5, show.legend = FALSE) +
+  scale_fill_manual(values = c('#e4492f','#85D16D','#206195','#e4492f','#85D16D','#206195')) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  #geom_smooth(method='lm', fill = NA) 
+  geom_line(stat='smooth', method='lm', formula = y ~ x+ I(x ^ 2), fill=NA, aes(color = year), alpha=1, linetype=2, linewidth=1.2)
+pvlAllDecades
+```
+
+
+```{r}
+pvlByYear <- pvlApprox%>%
+  pivot_wider( 
+    id_cols = 'siteCode', 
+    names_from = 'year', 
+    values_from = c('pisPerM2', 'pisgperm2', 'lepPerM2','lepgperm2'), 
+    names_glue = '{.value}.{year}'
+)
+
+head(pvlByYear)
+
+```
+
+```{r}
+pvlByYear <- pvlByYear %>%
+  mutate(p6to9B = `pisgperm2.1991-1992` - `pisgperm2.1969-1971`,
+         p9to2B = pisgperm2.2024 - `pisgperm2.1991-1992`,
+         p6to2B = pisgperm2.2024 - `pisgperm2.1969-1971`,
+         p6to2D = pisPerM2.2024 - `pisPerM2.1969-1971`,
+         l6to9B=`lepgperm2.1991-1992`- `lepgperm2.1969-1971`,
+         l9to2B = lepgperm2.2024 - `lepgperm2.1991-1992`,
+         l6to2B = lepgperm2.2024 - `lepgperm2.1969-1971`,
+         l6to2D = lepPerM2.2024 - `lepPerM2.1969-1971`)
+```
+
+
+
+```{r}
+pvlDensChange <- pvlByYear %>%
+  #filter(siteCode != "PC") %>%
+  ggplot(aes(x=p6to2D, y=l6to2D)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)
+  #geom_text_repel(aes(label=siteCode), nudge_x = 0, nudge_y = -1, min.segment.length = Inf)+
+  #scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  #scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  #xlab('Pisaster biomass (g/m2)') +
+  #ylab('Leptasterias biomass (g/m2)')
+pvlDensChange
+```
+```{r}
+pvlBmassChange6to9 <- pvlByYear %>%
+  ggplot(aes(x=p6to9B, y=l6to9B)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+  scale_y_continuous(limits = c(-11, 11), expand = c(0,0), breaks = c(-10,-5,0,5,10)) +
+  scale_x_continuous(limits = c(-250, 250), expand = c(0,0), breaks = c(-200,-100,0,100,200)) 
+  #geom_text_repel(aes(label=siteCode), nudge_x = 0, nudge_y = -1, min.segment.length = Inf)+
+  #scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  #scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  #xlab('Pisaster biomass (g/m2)') +
+  #ylab('Leptasterias biomass (g/m2)')
+pvlBmassChange6to9
+```
+
+
+```{r}
+pvlBmassChange9to2 <- pvlByYear %>%
+  ggplot(aes(x=p9to2B, y=l9to2B)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5)+
+  scale_y_continuous(limits = c(-11, 11), expand = c(0,0), breaks = c(-10,-5,0,5,10)) +
+  scale_x_continuous(limits = c(-250, 250), expand = c(0,0), breaks = c(-200,-100,0,100,200)) 
+  #geom_text_repel(aes(label=siteCode), nudge_x = 0, nudge_y = -1, min.segment.length = Inf)+
+  #scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  #scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  #xlab('Pisaster biomass (g/m2)') +
+  #ylab('Leptasterias biomass (g/m2)')
+pvlBmassChange9to2
+```
+
+
+```{r}
+pvlBmassChangeOverall <- pvlByYear %>%
+  ggplot() +
+  geom_point(aes(x=p6to9B, y=l6to9B),fill='#e4492f', size=2.5, shape = 21) +
+  geom_point(aes(x=p9to2B, y=l9to2B),fill='#85D16D', size=2.5, shape = 21) +
+  geom_point(aes(x=p6to2B, y=l6to2B), fill='#206195', size=2.5, shape = 21) +
+  geom_hline(yintercept=0, color='black')+
+  geom_vline(xintercept=0, color='black') +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 1.2),
+                              axis.ticks.x = element_line (color = "black", size = 1.2),
+                              #axis.line.y = element_line(color = "black"),
+                              #axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(-12, 12), expand = c(0,0), breaks = c(-10,-5,0,5,10)) +
+  scale_x_continuous(limits = c(-250, 250), expand = c(0,0), breaks = c(-200,-100,0,100,200)) +
+  xlab(bquote('Change in Pisaster Biomass '(g/m^2))) +
+  ylab(bquote('Change in Leptasterias Biomass '(g/m^2)))
+pvlBmassChangeOverall
+```
+
+
+```{r}
+pvlBmassChangeBlank <- pvlByYear %>%
+  ggplot() +
+  #geom_point(aes(x=p6to9B, y=l6to9B),colour='black') +
+  #geom_point(aes(x=p9to2B, y=l9to2B), colour ='black') +
+  #geom_point(aes(x=p6to2B, y=l6to2B), colour='black') +
+  geom_hline(yintercept=0, color='black')+
+  geom_vline(xintercept=0, color='black') +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 1.2),
+                              axis.ticks.x = element_line (color = "black", size = 1.2),
+                              #axis.line.y = element_line(color = "black"),
+                              #axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(-12, 12), expand = c(0,0), breaks = c(-10,-5,0,5,10)) +
+  scale_x_continuous(limits = c(-250, 250), expand = c(0,0), breaks = c(-200,-100,0,100,200)) +
+  xlab(bquote('Change in Pisaster Biomass '(g/m^2))) +
+  ylab(bquote('Change in Leptasterias Biomass '(g/m^2)))
+pvlBmassChangeBlank
+```
+
+```{r}
+pvlBmassChangeOverall <- pvlByYear %>%
+  ggplot() +
+  geom_point(aes(x=p6to9B, y=l6to9B),colour='black') +
+  geom_point(aes(x=p9to2B, y=l9to2B), colour ='black') +
+  geom_point(aes(x=p6to2B, y=l6to2B), colour='black') +
+  geom_hline(yintercept=0, color='black')+
+  geom_vline(xintercept=0, color='black') +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 1.2),
+                              axis.ticks.x = element_line (color = "black", size = 1.2),
+                              #axis.line.y = element_line(color = "black"),
+                              #axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(-12, 12), expand = c(0,0), breaks = c(-10,-5,0,5,10)) +
+  scale_x_continuous(limits = c(-250, 250), expand = c(0,0), breaks = c(-200,-100,0,100,200)) +
+  xlab(bquote('Change in Pisaster Biomass '(g/m^2))) +
+  ylab(bquote('Change in Leptasterias Biomass '(g/m^2)))
+pvlBmassChangeOverall
+```
+
+
+
+
+```{r}
+pvlAllDecades <- pvlApprox %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point(aes(fill = year, colour=year), shape = 21, size=3) +
+  scale_fill_manual(values = c('#eeeeee','#eeeeee','black')) +
+  scale_colour_manual(values = c('#cdcdcd','#cdcdcd','black')) +
+  #geom_line(linetype=3) +
+  #geom_segment(aes(xend=c(tail(pisgperm2, n=-1), NA),yend=c(tail(lepgperm2, n=-1), NA),color=siteCode)) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab('Pisaster biomass (g/m2)') +
+  ylab('Leptasterias biomass (g/m2)')
+pvlAllDecades
+```
+
+```{r}
+pvl60s <- pvlApprox %>% 
+  filter(year == "1969-1971") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point(aes(fill = year, colour=year), shape = 21, size=3) +
+  scale_fill_manual(values = c('black')) +
+  scale_colour_manual(values = c('black')) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass'(g/m^2))) +
+  ylab(bquote('Leptasterias biomass'(g/m^2))) +
+  geom_text_repel(aes(label= siteCode), nudge_x = 1, nudge_y = -.5, min.segment.length = Inf)
+pvl60s
+```
+
+```{r}
+#pvlApprox3 <- pvlApprox
+#pvlApprox3$class = with(mpg, reorder(class, hwy, median))
+pvl60s90s <- pvlApprox3 %>% 
+  arrange(year) %>%    
+  mutate(year=factor(year, levels=c('1991-1992','1969-1971','2024'))) %>% 
+  filter(year != "2024") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point(aes(fill = year, colour=year), shape = 21, size=3) +
+  scale_fill_manual(values = c('black','#cdcdcd')) +
+  scale_colour_manual(values = c('black','#a4a4a4')) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass'(g/m^2))) +
+  ylab(bquote('Leptasterias biomass'(g/m^2))) +
+  geom_text_repel(aes(label=ifelse(year=="1991-1992", siteCode,"")), nudge_x = 5, nudge_y = .8, min.segment.length = Inf)
+pvl60s90s
+```
+
+
+
+```{r}
+pvlAllDecades <- pvlApprox %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point(aes(fill = year, colour=year), shape = 21, size=3) +
+  scale_fill_manual(values = c('#cdcdcd','#eeeeee','black')) +
+  scale_colour_manual(values = c('#a4a4a4','#cdcdcd','black')) +
+  #geom_line(linetype=3) +
+  #geom_segment(aes(xend=c(tail(pisgperm2, n=-1), NA),yend=c(tail(lepgperm2, n=-1), NA),color=siteCode)) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass'(g/m^2))) +
+  ylab(bquote('Leptasterias biomass'(g/m^2))) +
+  geom_text_repel(aes(label=ifelse(year=="2024", siteCode,"")), nudge_x = 7, nudge_y = .8, min.segment.length = Inf)
+pvlAllDecades
+```
+
+
+
+
+
+
+
+
+```{r}
+pvl60s <- pvlApprox %>% 
+  filter(year == "1969-1971") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label= siteCode), nudge_x = 1, nudge_y = -.6, min.segment.length = Inf)
+pvl60s
+```
+
+```{r}
+pvl90s <- pvlApprox %>% 
+  filter(year == "1991-1992") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode, line=siteCode)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label=ifelse(year=="1991-1992", siteCode,"")), nudge_x = 7, nudge_y = 0, min.segment.length = Inf)
+pvl90s
+```
+
+```{r}
+pvl20s <- pvlApprox %>% 
+  filter(year == "2024") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year, group=siteCode)) +
+  geom_point() +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label= siteCode), nudge_x = 5, nudge_y = 0, min.segment.length = Inf)
+pvl20s
+```
+
+
+```{r}
+pvl20sB <- pvlApprox20s %>% 
+  filter(year == "2024") %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2, label=year)) +
+  geom_point(size=2) +
+  geom_line(stat='smooth', method='lm', formula = y ~ x + I(x ^ 2), color='black', alpha=.5, linetype=2)+
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 25), expand = c(0,0), breaks = c(0, 5,10,15,20)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label= siteCode), nudge_x = .7, nudge_y = .7, min.segment.length = Inf)
+pvl20sB
+```
+
+```{r}
+#pvlApprox60s <-pvlApprox %>% 
+  #filter(year == "1969-1971" & !is.na(lepgperm2) & !is.na(pisgperm2))
+
+#summary(lm(lepgperm2 ~ pisgperm2+I(pisgperm2^2), pvlApprox60s))
+
+pvlApprox90s <-pvlApprox %>% 
+  filter(year == "1991-1992" & !is.na(lepgperm2) & !is.na(pisgperm2))
+#summary(lm(lepgperm2 ~ pisgperm2, pvlApprox90s))
+summary(lm(lepgperm2 ~ pisgperm2+I(pisgperm2^2), pvlApprox90s))
+
+pvlApprox20s <-pvlApprox %>% 
+  filter(year == "2024" & !is.na(lepgperm2) & !is.na(pisgperm2))
+#summary(lm(lepgperm2 ~ pisgperm2, pvlApprox20s))
+summary(lm(lepgperm2 ~ pisgperm2+I(pisgperm2^2), pvlApprox20s))
+```
+
+
+```{r}
+pvl60sLine <- pvlApprox60s %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point(size=2) +
+  geom_line(stat='smooth', method='lm', formula = y ~ x + I(x ^ 2), color='black', alpha=.5, linetype=2)+
+  #stat_smooth(method = "lm", formula = y ~ x + I(x ^ 2), geom='smooth', se=FALSE,linetype=2, color='black', alpha=0.4) +
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label= siteCode), nudge_x = 1, nudge_y = -.6, min.segment.length = Inf)
+pvl60sLine
+```
+
+
+
+```{r}
+pvl90sLine <- pvlApprox90s %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point(size=2) +
+  geom_line(stat='smooth', method='lm', formula = y ~ x + I(x ^ 2), color='black', alpha=.5, linetype=2)+
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label=ifelse(year=="1991-1992", siteCode,"")), nudge_x = 7, nudge_y = 0, min.segment.length = Inf)
+
+pvl90sLine
+```
+
+```{r}
+pvl20sLine <- pvlApprox20s %>% 
+  ggplot(aes(x=pisgperm2, y=lepgperm2)) +
+  geom_point(size=2) +
+  geom_line(stat='smooth', method='lm', formula = y ~ x + I(x ^ 2), color='black', alpha=.5, linetype=2)+
+  theme (axis.title = element_text (size = 12), 
+                              axis.text.x = element_text (size = 10, color = "black"),
+                              axis.text.y = element_text (size = 10, color = "black"),
+                              axis.ticks.y = element_line (color = "black", size = 0.8),
+                              axis.ticks.x = element_blank(),
+                              axis.line.y = element_line(color = "black"),
+                              axis.line.x = element_line(color = "black"),
+                              panel.background = element_blank (), 
+                              panel.grid.major = element_blank (),
+                              panel.grid.minor = element_blank (),
+                              plot.background = element_blank (),
+                              legend.key = element_rect(fill = "white"),
+                              legend.title = element_text(size = 12),
+                              legend.position = "right",
+                              legend.text = element_text(size = 12),
+                              legend.title.align = 0.5) +
+  scale_y_continuous(limits = c(0, 20), expand = c(0,0), breaks = c(0, 5, 10, 15)) +
+  scale_x_continuous(limits = c(0, 250), expand = c(0,0), breaks = c(0, 50, 100, 150, 200)) +
+  xlab(bquote('Pisaster biomass '(g/m^2))) +
+  ylab(bquote('Leptasterias biomass '(g/m^2))) +
+  geom_text_repel(aes(label=ifelse(year=="2024", siteCode,"")), nudge_x = 7, nudge_y = 0, min.segment.length = Inf)
+
+pvl20sLine
+```
+
+```{r}
+pvlApprox60s20s <-pvlApprox %>% 
+  filter(year != "1991-1992" & !is.na(lepgperm2) & !is.na(pisgperm2))
+
+t.test(lepPerM2~year,pvlApprox60s20s, alternative = "two.sided", paired = FALSE, var.equal = TRUE)
+```
+
+
+
+
+
+
+```{r}
+ggsave('pvl60s.jpg', pvl60s, height = 5, width = 8, dpi=600)
+ggsave('pvl90s.jpg', pvl90s, height = 5, width = 8, dpi=600)
+ggsave('pvl20s.jpg', pvl20s, height = 5, width = 8, dpi=600)
+```
+
+```{r}
+ggsave('pvl60sLine.jpg', pvl60sLine, height = 5, width = 8, dpi=600)
+ggsave('pvl90sLine.jpg', pvl90sLine, height = 5, width = 8, dpi=600)
+ggsave('pvl20sLine.jpg', pvl20sLine, height = 5, width = 8, dpi=600)
+```
+
+
+```{r}
+ggsave('pvl20sB.jpg', pvl20sB, height = 5, width = 8, dpi=600)
+```
+
+
+```{r}
+ggsave('pvlAllDecades.jpg', pvlAllDecades, height = 5, width = 8, dpi=600)
+```
+
+```{r}
+ggsave('lepoertime.jpg', lepoertime, height = 6, width = 9, dpi=600)
+```
+
+```{r}
+ggsave('lepoertimePts.jpg', lepoertimePts, height=6, width=9, dpi=600)
+```
+
+```{r}
+ggsave('pisoertime.jpg', pisoertime, height=6, width=9, dpi=600)
+ggsave('pisoertimePts.jpg', pisoertimePts, height=6, width=9, dpi=600)
+```
+
+```{r}
+ggsave('lepdenstime.jpg', lepdenstime, height=6, width=9, dpi=600)
+ggsave('lepmasstime.jpg', lepmasstime, height=6, width=9, dpi=600)
+```
+
+```{r}
+ggsave('pvlBmassChangeOverall.jpg', pvlBmassChangeOverall, height = 6, width = 8, dpi=600)
+ggsave('pvlBmassChangeBlank.jpg', pvlBmassChangeBlank, height = 6, width = 8, dpi=600)
+```
+
+```{r}
+ggsave('ppnpHisto.jpg', ppnpHisto, height = 6, width = 6, dpi=600)
+ggsave('cpHisto.jpg', cpHisto, height = 6, width = 6, dpi=600)
+ggsave('pcHisto.jpg', pcHisto, height = 6, width = 6, dpi=600)
+ggsave('dbHisto.jpg', dbHisto, height = 6, width = 6, dpi=600)
+ggsave('shHisto.jpg', shHisto, height = 6, width = 6, dpi=600)
+ggsave('ppspHisto.jpg', ppspHisto, height = 6, width = 6, dpi=600)
+ggsave('lcraHisto.jpg', lcraHisto, height = 6, width = 6, dpi=600)
+ggsave('rtHisto.jpg', rtHisto, height = 6, width = 6, dpi=600)
+```
+
