@@ -1,3 +1,10 @@
+
+# This function was written to split the Excel file in which I originally
+# entered 2024 star date into separate CSVs
+# It is no longer useful since the orginal Excel has been removed
+#But I thought it might come in handy so I am storing it here!
+
+
 library(readxl)
 getwd()
 
