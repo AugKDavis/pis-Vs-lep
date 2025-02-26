@@ -23,7 +23,11 @@ sheetNames <- gsub(fileNames,pattern=".csv$", replacement="")
 #reading in CSVs! 
 starFrames <- lapply(pathNames, read.csv)
 
-
+ starFrames <- list()
+  for(fileNum in 1:length(fileNames))
+  {
+  assign(sheetNames[fileNum],read_csv(file = paste0("../sheets/2024/",fileNames[fileNum]), 
+                                         col_types = c("c","D","c","c","n","n","n","c")))}
 
 
 
