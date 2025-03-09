@@ -12,7 +12,10 @@
 #For reading files, manipulating, plotting, etc.
 library(tidyverse)
 
-#To get my data
-source("../../../../code/cleaning/2024Cleaning.R")
+#To get theme for ggplot figures!
+source("../theme/ktTheme.R")
 
-getwd()
+# ------------------
+#   Bring in data!
+# ------------------
+
