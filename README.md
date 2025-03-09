@@ -9,6 +9,8 @@
 ---
 ## Helpful Links
 
+[Box folder containing raw unentered data (photos of our notebooks)](https://oregonstate.box.com/s/7rwyhjenycpcc3kcx60etn0wrq677xsi)
+
 [Bruce's original 1972 description of competition between *Pisaster* and *Leptasterias* stars](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.2307/1934777)
 
 [Jane and Bruce's experiments demonstrating interference competition between these species](https://esajournals.onlinelibrary.wiley.com/doi/abs/10.2307/1934777)
