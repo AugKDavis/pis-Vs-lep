@@ -40,7 +40,22 @@ starData %>%
 # ------------------
 #   Make a multi-panel histogram of size-dist by site!
 # ------------------
-
+starData %>%
+  filter(Spp == 'LEP') %>%
+  ggplot(aes(y=Wt)) + 
+  geom_histogram(binwidth = 2.5, 
+                 color = 'black',
+                 fill="#E0B46C") +
+  facet_wrap(nrow = 2, 
+             ~ factor(Site),
+             scales = "free_y") +
+  scale_y_continuous(limits = c(-2, 20), 
+                     expand = c(0,0), 
+                     breaks = c(0,5,10,15,20)) +
+  scale_x_continuous(limits = c(0,150),
+                     expand = c(0,0),
+                     breaks = c(0,50,100,150)) +
+  ktTheme
 
   
   
